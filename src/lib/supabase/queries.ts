@@ -1,22 +1,24 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "./server";
+import { getSupabasePublicEnv } from "./env";
 import type { Villa, VillaImage, VillaWithImages, UnavailableDate } from "@/types";
 
 /**
- * Build a Supabase client that does NOT touch cookies. Safe to call from
- * `generateStaticParams` / `generateMetadata` where a request scope is not
- * available. All these queries only read publicly-readable rows.
+ * Cookie-less client for public reads (generateStaticParams, ISR).
+ * Returns null when env vars are missing (e.g. Vercel build before env is set).
  */
-function publicClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false, autoRefreshToken: false } }
-  );
+function publicClient(): SupabaseClient | null {
+  const env = getSupabasePublicEnv();
+  if (!env) return null;
+  return createClient(env.url, env.anonKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
 }
 
 export async function getAllVillas(): Promise<VillaWithImages[]> {
   const supabase = publicClient();
+  if (!supabase) return [];
+
   const { data: villas, error } = await supabase
     .from("villas")
     .select("*")
@@ -26,6 +28,10 @@ export async function getAllVillas(): Promise<VillaWithImages[]> {
   if (error || !villas) return [];
 
   const ids = villas.map((v) => v.id);
+  if (ids.length === 0) {
+    return (villas as Villa[]).map((v) => ({ ...v, images: [] }));
+  }
+
   const { data: images } = await supabase
     .from("villa_images")
     .select("*")
@@ -47,6 +53,8 @@ export async function getVillaBySlug(
   slug: string
 ): Promise<VillaWithImages | null> {
   const supabase = publicClient();
+  if (!supabase) return null;
+
   const { data: villa, error } = await supabase
     .from("villas")
     .select("*")
@@ -66,6 +74,8 @@ export async function getVillaBySlug(
 
 export async function getVillaById(id: string): Promise<VillaWithImages | null> {
   const supabase = publicClient();
+  if (!supabase) return null;
+
   const { data: villa } = await supabase
     .from("villas")
     .select("*")
@@ -84,6 +94,8 @@ export async function getUnavailableDates(
   villaId: string
 ): Promise<UnavailableDate[]> {
   const supabase = publicClient();
+  if (!supabase) return [];
+
   const { data } = await supabase
     .from("villa_unavailable_dates")
     .select("*")
@@ -94,14 +106,21 @@ export async function getUnavailableDates(
 }
 
 export async function getUserFavoriteIds(): Promise<string[]> {
-  const supabase = createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return [];
-  const { data } = await supabase
-    .from("favorites")
-    .select("villa_id")
-    .eq("user_id", user.id);
-  return (data || []).map((r: { villa_id: string }) => r.villa_id);
+  if (!getSupabasePublicEnv()) return [];
+
+  try {
+    const supabase = createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return [];
+    const { data } = await supabase
+      .from("favorites")
+      .select("villa_id")
+      .eq("user_id", user.id);
+    return (data || []).map((r: { villa_id: string }) => r.villa_id);
+  } catch {
+    // cookies() unavailable during static generation, or auth not configured
+    return [];
+  }
 }

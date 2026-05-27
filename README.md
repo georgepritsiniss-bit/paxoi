@@ -134,6 +134,22 @@ The `/admin` area is **separate** from Supabase user auth. It uses a tiny custom
 
 ## ☁️ Deploy to Vercel
 
+### Required: add environment variables before deploy
+
+In **Vercel → your project → Settings → Environment Variables**, add these for **Production** and **Preview** (build will fail or show empty villas without them):
+
+| Name | Value |
+|------|--------|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://xxxx.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon public key from Supabase |
+| `SUPABASE_SERVICE_ROLE_KEY` | service role key (admin only, secret) |
+| `ADMIN_USERNAME` | `root` (or your choice) |
+| `ADMIN_PASSWORD` | change from default |
+| `ADMIN_SESSION_SECRET` | long random string (32+ chars) |
+| `NEXT_PUBLIC_SITE_URL` | `https://your-domain.vercel.app` |
+
+After saving, **redeploy** (Deployments → ⋯ → Redeploy) so the build picks up the new variables.
+
 ### 1. Push the project to GitHub
 
 ```bash

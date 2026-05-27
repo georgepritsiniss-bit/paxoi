@@ -1,5 +1,6 @@
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
+import { getSupabasePublicEnv } from "./env";
 
 /**
  * Server-only Supabase client using the service role key.
@@ -7,14 +8,14 @@ import { createClient } from "@supabase/supabase-js";
  * server actions / route handlers — never expose to the browser.
  */
 export function createSupabaseAdminClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) {
+  const env = getSupabasePublicEnv();
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  if (!env || !key) {
     throw new Error(
-      "Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY"
+      "Missing Supabase admin env: set NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, and SUPABASE_SERVICE_ROLE_KEY in Vercel / .env.local."
     );
   }
-  return createClient(url, key, {
+  return createClient(env.url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }

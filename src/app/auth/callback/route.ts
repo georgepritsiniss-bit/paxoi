@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { getSupabasePublicEnv } from "@/lib/supabase/env";
 
 /**
  * Supabase Auth callback handler. Exchanges the auth code in the URL
@@ -12,11 +13,9 @@ export async function GET(request: NextRequest) {
 
   const response = NextResponse.redirect(`${origin}${next}`);
 
-  if (code) {
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
+  const env = getSupabasePublicEnv();
+  if (code && env) {
+    const supabase = createServerClient(env.url, env.anonKey, {
         cookies: {
           get(name: string) {
             return request.cookies.get(name)?.value;
