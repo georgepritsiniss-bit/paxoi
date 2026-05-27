@@ -1,7 +1,8 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import { ExternalLink, Loader2 } from "lucide-react";
 import type { Villa } from "@/types";
 
 function Submit({ label }: { label: string }) {
@@ -142,9 +143,19 @@ export default function VillaForm({
       </div>
 
       <div>
-        <label className="label">Hero image URL</label>
+        <div className="flex items-center justify-between">
+          <label className="label mb-0">Hero image URL</label>
+          <Link
+            href="/admin/media"
+            target="_blank"
+            className="inline-flex items-center gap-1 text-[11px] text-ink-500 hover:text-ink-900"
+          >
+            Pick from media library
+            <ExternalLink className="h-3 w-3" />
+          </Link>
+        </div>
         <input
-          className="input"
+          className="input mt-1.5"
           name="hero_image"
           defaultValue={villa?.hero_image || ""}
           placeholder="https://..."

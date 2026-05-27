@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { Home, Heart, MessageSquare, Image as ImageIcon } from "lucide-react";
+import {
+  Home,
+  Heart,
+  MessageSquare,
+  Image as ImageIcon,
+  Sparkles,
+  ArrowUpRight,
+} from "lucide-react";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
@@ -11,12 +18,16 @@ export default async function AdminDashboardPage() {
     { count: imageCount },
     { count: favoriteCount },
     { count: messageCount },
+    { count: mediaCount },
   ] = await Promise.all([
     supabase.from("villas").select("*", { count: "exact", head: true }),
     supabase.from("villa_images").select("*", { count: "exact", head: true }),
     supabase.from("favorites").select("*", { count: "exact", head: true }),
     supabase
       .from("contact_messages")
+      .select("*", { count: "exact", head: true }),
+    supabase
+      .from("media_library")
       .select("*", { count: "exact", head: true }),
   ]);
 
@@ -28,9 +39,28 @@ export default async function AdminDashboardPage() {
 
   const stats = [
     { label: "Villas", value: villaCount ?? 0, icon: Home },
-    { label: "Images", value: imageCount ?? 0, icon: ImageIcon },
+    { label: "Gallery images", value: imageCount ?? 0, icon: ImageIcon },
+    { label: "Media library", value: mediaCount ?? 0, icon: Sparkles },
     { label: "Favorites", value: favoriteCount ?? 0, icon: Heart },
     { label: "Messages", value: messageCount ?? 0, icon: MessageSquare },
+  ];
+
+  const quickLinks = [
+    {
+      title: "Edit homepage content",
+      body: "Tune the hero, about, experiences and CTA blocks (EN + GR).",
+      href: "/admin/content",
+    },
+    {
+      title: "Manage media library",
+      body: "Upload reusable images or save Unsplash URLs.",
+      href: "/admin/media",
+    },
+    {
+      title: "Add a new villa",
+      body: "Spin up a listing, then attach a gallery from the edit page.",
+      href: "/admin/villas/new",
+    },
   ];
 
   return (
@@ -40,13 +70,13 @@ export default async function AdminDashboardPage() {
         A quick overview of your villa collection.
       </p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {stats.map((s) => {
           const Icon = s.icon;
           return (
             <div
               key={s.label}
-              className="rounded-2xl border border-ink-900/5 bg-white p-5"
+              className="rounded-2xl border border-ink-900/5 bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-md"
             >
               <Icon className="h-4 w-4 text-sand-600" />
               <div className="mt-4 font-serif text-3xl text-ink-900">
@@ -58,6 +88,22 @@ export default async function AdminDashboardPage() {
             </div>
           );
         })}
+      </div>
+
+      <div className="mt-10 grid gap-4 md:grid-cols-3">
+        {quickLinks.map((q) => (
+          <Link
+            key={q.href}
+            href={q.href}
+            className="group rounded-2xl border border-ink-900/5 bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-md"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="font-medium text-ink-900">{q.title}</div>
+              <ArrowUpRight className="h-4 w-4 text-ink-400 transition-transform group-hover:rotate-45 group-hover:text-ink-900" />
+            </div>
+            <p className="mt-2 text-sm text-ink-500">{q.body}</p>
+          </Link>
+        ))}
       </div>
 
       <div className="mt-12">

@@ -3,6 +3,8 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ScrollProgress from "@/components/ScrollProgress";
+import PageTransition from "@/components/PageTransition";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 
 const inter = Inter({
@@ -67,8 +69,11 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="min-h-screen bg-sand-50 font-sans antialiased">
         <LanguageProvider>
+          <ScrollProgress />
           <Navbar />
-          <main className="min-h-screen pt-20">{children}</main>
+          <main className="min-h-screen pt-20">
+            <PageTransition>{children}</PageTransition>
+          </main>
           <Footer />
         </LanguageProvider>
       </body>

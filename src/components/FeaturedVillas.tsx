@@ -22,8 +22,9 @@ export default function FeaturedVillas({
             initial={{ opacity: 0, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="eyebrow"
+            className="inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.25em] text-sand-600"
           >
+            <span className="inline-block h-px w-8 bg-sand-500/60" />
             {t.home.featuredTitle}
           </motion.span>
           <motion.h2

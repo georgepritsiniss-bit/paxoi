@@ -230,3 +230,145 @@ export async function deleteUnavailableRange(
   if (error) throw new Error(error.message);
   revalidatePath(`/admin/villas/${villaId}/edit`);
 }
+
+// ============================================================
+//  Site content (CMS)
+// ============================================================
+
+const VALID_CONTENT_KEYS = new Set([
+  "home_hero",
+  "home_about",
+  "home_experiences",
+  "home_cta",
+]);
+
+/**
+ * Generic upsert for a site_content row. The form posts a single JSON blob
+ * under the `value` field; we parse, validate it is a plain object, and
+ * write it. The component-side fallback guarantees that any malformed or
+ * partial row still degrades gracefully on the public site.
+ */
+export async function saveSiteContent(key: string, formData: FormData) {
+  requireAdmin();
+  if (!VALID_CONTENT_KEYS.has(key)) throw new Error("Unknown content key");
+
+  const raw = String(formData.get("value") || "").trim();
+  let parsed: unknown = {};
+  if (raw) {
+    try {
+      parsed = JSON.parse(raw);
+    } catch (e) {
+      throw new Error(
+        "Invalid JSON for content block: " + (e as Error).message
+      );
+    }
+  }
+  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+    throw new Error("Content value must be a JSON object.");
+  }
+
+  const supabase = createSupabaseAdminClient();
+  const { error } = await supabase
+    .from("site_content")
+    .upsert({ key, value: parsed }, { onConflict: "key" });
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/");
+  revalidatePath("/admin/content");
+}
+
+export async function resetSiteContent(key: string) {
+  requireAdmin();
+  if (!VALID_CONTENT_KEYS.has(key)) throw new Error("Unknown content key");
+  const supabase = createSupabaseAdminClient();
+  const { error } = await supabase
+    .from("site_content")
+    .delete()
+    .eq("key", key);
+  if (error) throw new Error(error.message);
+  revalidatePath("/");
+  revalidatePath("/admin/content");
+}
+
+// ============================================================
+//  Media library
+// ============================================================
+
+function fileExt(name: string) {
+  const dot = name.lastIndexOf(".");
+  if (dot < 0) return "jpg";
+  return name.slice(dot + 1).toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+}
+
+export async function uploadMediaFile(formData: FormData) {
+  requireAdmin();
+  const supabase = createSupabaseAdminClient();
+  const file = formData.get("file") as File | null;
+  const alt = String(formData.get("alt") || "") || null;
+  if (!file || file.size === 0) return;
+
+  const path = `media/${randomUUID()}.${fileExt(file.name)}`;
+  const bytes = new Uint8Array(await file.arrayBuffer());
+
+  const { error: upErr } = await supabase.storage
+    .from("villa-images")
+    .upload(path, bytes, {
+      contentType: file.type || "image/jpeg",
+      cacheControl: "31536000",
+      upsert: false,
+    });
+  if (upErr) throw new Error(upErr.message);
+
+  const { data: pub } = supabase.storage
+    .from("villa-images")
+    .getPublicUrl(path);
+
+  const { error: dbErr } = await supabase.from("media_library").insert({
+    url: pub.publicUrl,
+    alt: alt || file.name,
+    kind: "image",
+    storage_path: path,
+  });
+  if (dbErr) throw new Error(dbErr.message);
+
+  revalidatePath("/admin/media");
+}
+
+export async function addMediaUrl(formData: FormData) {
+  requireAdmin();
+  const url = String(formData.get("url") || "").trim();
+  const alt = String(formData.get("alt") || "") || null;
+  if (!url) return;
+
+  const supabase = createSupabaseAdminClient();
+  const { error } = await supabase.from("media_library").insert({
+    url,
+    alt,
+    kind: "image",
+    storage_path: null,
+  });
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/admin/media");
+}
+
+export async function deleteMediaItem(id: string) {
+  requireAdmin();
+  const supabase = createSupabaseAdminClient();
+
+  // Find storage_path so we can also clean up the bucket for uploaded files.
+  const { data: row } = await supabase
+    .from("media_library")
+    .select("storage_path")
+    .eq("id", id)
+    .maybeSingle();
+
+  const { error } = await supabase.from("media_library").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+
+  if (row?.storage_path) {
+    await supabase.storage.from("villa-images").remove([row.storage_path]);
+  }
+
+  revalidatePath("/admin/media");
+}

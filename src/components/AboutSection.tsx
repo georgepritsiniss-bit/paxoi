@@ -5,12 +5,31 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import type { AboutContent } from "@/types";
 
-export default function AboutSection() {
-  const { t } = useLanguage();
+const DEFAULT_IMAGE =
+  "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1400&q=80";
+
+const DEFAULT_STATS = [
+  { k: "3", v: "Private villas" },
+  { k: "22", v: "Guests max" },
+  { k: "0", v: "Booking fees" },
+];
+
+export default function AboutSection({ content }: { content?: AboutContent }) {
+  const { t, locale } = useLanguage();
+
+  const localized = content?.[locale];
+  const eyebrow = localized?.eyebrow || t.home.aboutEyebrow;
+  const title = localized?.title || t.home.aboutTitle;
+  const body = localized?.body || t.home.aboutBody;
+  const image = content?.image || DEFAULT_IMAGE;
+  const stats =
+    content?.stats && content.stats.length > 0 ? content.stats : DEFAULT_STATS;
+
   return (
-    <section className="container-px mx-auto max-w-7xl py-24 md:py-32">
-      <div className="grid items-center gap-12 md:grid-cols-2 md:gap-20">
+    <section className="container-px mx-auto max-w-7xl py-20 md:py-28 lg:py-32">
+      <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16 lg:gap-20">
         <motion.div
           initial={{ opacity: 0, x: -32 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -19,11 +38,11 @@ export default function AboutSection() {
           className="relative aspect-[4/5] overflow-hidden rounded-3xl"
         >
           <Image
-            src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1400&q=80"
+            src={image}
             alt="Olive groves above the Ionian sea"
             fill
             sizes="(min-width:768px) 50vw, 100vw"
-            className="object-cover"
+            className="object-cover transition-transform duration-[1500ms] hover:scale-[1.04]"
           />
         </motion.div>
 
@@ -34,7 +53,7 @@ export default function AboutSection() {
             viewport={{ once: true }}
             className="eyebrow"
           >
-            {t.home.aboutEyebrow}
+            {eyebrow}
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 16 }}
@@ -43,16 +62,16 @@ export default function AboutSection() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="mt-3 h-section text-balance"
           >
-            {t.home.aboutTitle}
+            {title}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-6 max-w-xl text-base leading-relaxed text-ink-500"
+            className="mt-5 max-w-xl text-base leading-relaxed text-ink-500 sm:mt-6"
           >
-            {t.home.aboutBody}
+            {body}
           </motion.p>
 
           <motion.div
@@ -60,16 +79,19 @@ export default function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-8 grid grid-cols-3 gap-4"
+            className="mt-8 grid grid-cols-3 gap-3 sm:gap-4"
           >
-            {[
-              { k: "3", v: "Private villas" },
-              { k: "22", v: "Guests max" },
-              { k: "0", v: "Booking fees" },
-            ].map((s) => (
-              <div key={s.v} className="rounded-2xl bg-sand-100/60 p-4">
-                <div className="font-serif text-3xl text-ink-900">{s.k}</div>
-                <div className="mt-1 text-xs text-ink-500">{s.v}</div>
+            {stats.map((s) => (
+              <div
+                key={`${s.k}-${s.v}`}
+                className="rounded-2xl bg-sand-100/60 p-3 transition-colors hover:bg-sand-100 sm:p-4"
+              >
+                <div className="font-serif text-2xl text-ink-900 sm:text-3xl">
+                  {s.k}
+                </div>
+                <div className="mt-1 text-[11px] text-ink-500 sm:text-xs">
+                  {s.v}
+                </div>
               </div>
             ))}
           </motion.div>

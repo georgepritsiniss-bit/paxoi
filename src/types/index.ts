@@ -55,3 +55,65 @@ export type ContactMessage = {
   villa_id: string | null;
   created_at: string;
 };
+
+// ----- CMS / Media (additive) -----
+
+/**
+ * Generic, locale-aware translation block used inside site_content rows.
+ * Components fall back to translations.ts when a field is missing.
+ */
+export type LocalizedText = Partial<{
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  body: string;
+}>;
+
+export type HeroContent = {
+  image?: string;
+  en?: LocalizedText;
+  gr?: LocalizedText;
+};
+
+export type AboutContent = {
+  image?: string;
+  stats?: Array<{ k: string; v: string }>;
+  en?: LocalizedText;
+  gr?: LocalizedText;
+};
+
+export type ExperienceItem = {
+  icon?: string;
+  image?: string;
+  en?: { title?: string; body?: string };
+  gr?: { title?: string; body?: string };
+};
+
+export type ExperiencesContent = {
+  items?: ExperienceItem[];
+};
+
+export type CtaContent = {
+  image?: string;
+  en?: LocalizedText;
+  gr?: LocalizedText;
+};
+
+export type SiteContentMap = {
+  home_hero?: HeroContent;
+  home_about?: AboutContent;
+  home_experiences?: ExperiencesContent;
+  home_cta?: CtaContent;
+};
+
+export type SiteContentKey = keyof SiteContentMap;
+
+export type MediaItem = {
+  id: string;
+  url: string;
+  alt: string | null;
+  kind: string;
+  storage_path: string | null;
+  tags: string[];
+  created_at: string;
+};

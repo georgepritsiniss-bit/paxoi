@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowUpRight, BedDouble, Bath, Users } from "lucide-react";
+import { ArrowUpRight, BedDouble, Bath, Users, MapPin } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { formatPrice } from "@/lib/utils";
 import type { VillaWithImages } from "@/types";
@@ -29,7 +29,7 @@ export default function VillaCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.6, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative overflow-hidden rounded-3xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_30px_-12px_rgba(0,0,0,0.12)] transition-all hover:shadow-[0_20px_50px_-15px_rgba(0,0,0,0.25)]"
+      className="group relative overflow-hidden rounded-3xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_30px_-12px_rgba(0,0,0,0.12)] card-lift"
     >
       <Link href={`/villas/${villa.slug}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden bg-ink-100">
@@ -39,14 +39,31 @@ export default function VillaCard({
               alt={villa.name}
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+              loading={index < 3 ? "eager" : "lazy"}
               className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-ink-900/40 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink-900/55 via-ink-900/5 to-transparent" />
           <FavoriteButton villaId={villa.id} initialFavorited={initialFavorited} />
+
+          {villa.location && (
+            <div className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] text-white backdrop-blur-md ring-1 ring-white/25">
+              <MapPin className="h-3 w-3" />
+              {villa.location}
+            </div>
+          )}
+
           {villa.price_from != null && (
-            <div className="absolute bottom-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-ink-900 backdrop-blur">
-              {t.listing.from} {formatPrice(villa.price_from)} · {t.listing.perNight}
+            <div className="absolute bottom-4 left-4 inline-flex items-baseline gap-1.5 rounded-full bg-white/92 px-3.5 py-1.5 text-xs font-medium text-ink-900 shadow-sm backdrop-blur">
+              <span className="text-[10px] uppercase tracking-wider text-ink-400">
+                {t.listing.from}
+              </span>
+              <span className="font-serif text-sm">
+                {formatPrice(villa.price_from)}
+              </span>
+              <span className="text-[10px] text-ink-400">
+                /{t.listing.perNight}
+              </span>
             </div>
           )}
         </div>

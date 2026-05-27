@@ -1,7 +1,14 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "./server";
 import { getSupabasePublicEnv } from "./env";
-import type { Villa, VillaImage, VillaWithImages, UnavailableDate } from "@/types";
+import type {
+  Villa,
+  VillaImage,
+  VillaWithImages,
+  UnavailableDate,
+  SiteContentMap,
+  MediaItem,
+} from "@/types";
 
 /**
  * Cookie-less client for public reads (generateStaticParams, ISR).
@@ -103,6 +110,40 @@ export async function getUnavailableDates(
     .gte("end_date", new Date().toISOString().slice(0, 10))
     .order("start_date", { ascending: true });
   return (data as UnavailableDate[]) || [];
+}
+
+/**
+ * Loads all CMS content blocks in one round-trip and returns them keyed by
+ * their `key` column. Components are responsible for falling back to
+ * translations.ts when a key is absent or partially filled.
+ */
+export async function getSiteContent(): Promise<SiteContentMap> {
+  const supabase = publicClient();
+  if (!supabase) return {};
+
+  const { data, error } = await supabase
+    .from("site_content")
+    .select("key, value");
+
+  if (error || !data) return {};
+
+  const map: Record<string, unknown> = {};
+  for (const row of data as { key: string; value: unknown }[]) {
+    map[row.key] = row.value;
+  }
+  return map as SiteContentMap;
+}
+
+export async function getAllMedia(): Promise<MediaItem[]> {
+  const supabase = publicClient();
+  if (!supabase) return [];
+
+  const { data } = await supabase
+    .from("media_library")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  return (data as MediaItem[]) || [];
 }
 
 export async function getUserFavoriteIds(): Promise<string[]> {

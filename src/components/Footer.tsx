@@ -13,6 +13,15 @@ export default function Footer() {
   return (
     <footer className="mt-24 border-t border-ink-900/5 bg-ink-900 text-sand-100">
       <div className="container-px mx-auto max-w-7xl py-16">
+        {/* Top hairline ornament */}
+        <div className="mx-auto mb-12 flex max-w-md items-center gap-4 text-sand-400/60">
+          <span className="h-px flex-1 bg-gradient-to-r from-transparent to-sand-400/40" />
+          <span className="text-[10px] uppercase tracking-[0.4em]">
+            Paxoi · Greece
+          </span>
+          <span className="h-px flex-1 bg-gradient-to-l from-transparent to-sand-400/40" />
+        </div>
+
         <div className="grid gap-12 md:grid-cols-4">
           <div className="md:col-span-2">
             <Link href="/" className="font-serif text-3xl tracking-tight">
