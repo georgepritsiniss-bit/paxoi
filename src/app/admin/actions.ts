@@ -300,56 +300,84 @@ function fileExt(name: string) {
   return name.slice(dot + 1).toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
 }
 
-export async function uploadMediaFile(formData: FormData) {
-  requireAdmin();
-  const supabase = createSupabaseAdminClient();
-  const file = formData.get("file") as File | null;
-  const alt = String(formData.get("alt") || "") || null;
-  if (!file || file.size === 0) return;
+export type MediaActionState = { error: string | null; ok: boolean };
 
-  const path = `media/${randomUUID()}.${fileExt(file.name)}`;
-  const bytes = new Uint8Array(await file.arrayBuffer());
+export async function uploadMediaFile(
+  _state: MediaActionState,
+  formData: FormData
+): Promise<MediaActionState> {
+  try {
+    requireAdmin();
+    const supabase = createSupabaseAdminClient();
+    const file = formData.get("file") as File | null;
+    const alt = String(formData.get("alt") || "") || null;
+    if (!file || file.size === 0) {
+      return { error: "Please choose a file.", ok: false };
+    }
 
-  const { error: upErr } = await supabase.storage
-    .from("villa-images")
-    .upload(path, bytes, {
-      contentType: file.type || "image/jpeg",
-      cacheControl: "31536000",
-      upsert: false,
+    const path = `media/${randomUUID()}.${fileExt(file.name)}`;
+    const bytes = new Uint8Array(await file.arrayBuffer());
+
+    const { error: upErr } = await supabase.storage
+      .from("villa-images")
+      .upload(path, bytes, {
+        contentType: file.type || "image/jpeg",
+        cacheControl: "31536000",
+        upsert: false,
+      });
+    if (upErr) {
+      return { error: `Storage error: ${upErr.message}`, ok: false };
+    }
+
+    const { data: pub } = supabase.storage
+      .from("villa-images")
+      .getPublicUrl(path);
+
+    const { error: dbErr } = await supabase.from("media_library").insert({
+      url: pub.publicUrl,
+      alt: alt || file.name,
+      kind: "image",
+      storage_path: path,
     });
-  if (upErr) throw new Error(upErr.message);
+    if (dbErr) {
+      // Try to roll the storage object back so we don't leak orphaned files.
+      await supabase.storage.from("villa-images").remove([path]);
+      return { error: `Database error: ${dbErr.message}`, ok: false };
+    }
 
-  const { data: pub } = supabase.storage
-    .from("villa-images")
-    .getPublicUrl(path);
-
-  const { error: dbErr } = await supabase.from("media_library").insert({
-    url: pub.publicUrl,
-    alt: alt || file.name,
-    kind: "image",
-    storage_path: path,
-  });
-  if (dbErr) throw new Error(dbErr.message);
-
-  revalidatePath("/admin/media");
+    revalidatePath("/admin/media");
+    return { error: null, ok: true };
+  } catch (e) {
+    return { error: (e as Error).message, ok: false };
+  }
 }
 
-export async function addMediaUrl(formData: FormData) {
-  requireAdmin();
-  const url = String(formData.get("url") || "").trim();
-  const alt = String(formData.get("alt") || "") || null;
-  if (!url) return;
+export async function addMediaUrl(
+  _state: MediaActionState,
+  formData: FormData
+): Promise<MediaActionState> {
+  try {
+    requireAdmin();
+    const url = String(formData.get("url") || "").trim();
+    const alt = String(formData.get("alt") || "") || null;
+    if (!url) return { error: "URL is required.", ok: false };
 
-  const supabase = createSupabaseAdminClient();
-  const { error } = await supabase.from("media_library").insert({
-    url,
-    alt,
-    kind: "image",
-    storage_path: null,
-  });
-  if (error) throw new Error(error.message);
+    const supabase = createSupabaseAdminClient();
+    const { error } = await supabase.from("media_library").insert({
+      url,
+      alt,
+      kind: "image",
+      storage_path: null,
+    });
+    if (error) {
+      return { error: `Database error: ${error.message}`, ok: false };
+    }
 
-  revalidatePath("/admin/media");
+    revalidatePath("/admin/media");
+    return { error: null, ok: true };
+  } catch (e) {
+    return { error: (e as Error).message, ok: false };
+  }
 }
 
 export async function deleteMediaItem(id: string) {

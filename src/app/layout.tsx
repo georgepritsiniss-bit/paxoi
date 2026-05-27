@@ -66,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="el" className={`${inter.variable} ${playfair.variable}`}>
       <body className="min-h-screen bg-sand-50 font-sans antialiased">
         <LanguageProvider>
           <ScrollProgress />

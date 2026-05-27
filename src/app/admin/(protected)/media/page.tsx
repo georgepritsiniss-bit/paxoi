@@ -1,11 +1,7 @@
 import Link from "next/link";
-import { Image as ImageIcon, Plus, Link as LinkIcon } from "lucide-react";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import {
-  addMediaUrl,
-  uploadMediaFile,
-} from "../../actions";
 import MediaCard from "./_card";
+import { AddUrlForm, UploadFileForm } from "./_upload-forms";
 import type { MediaItem } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -35,60 +31,8 @@ export default async function MediaLibraryPage() {
       </div>
 
       <div className="mt-8 grid gap-4 md:grid-cols-2">
-        <form
-          action={uploadMediaFile}
-          className="rounded-2xl border border-ink-900/5 bg-white p-5"
-        >
-          <div className="flex items-center gap-2 text-sm font-medium text-ink-900">
-            <ImageIcon className="h-4 w-4" />
-            Upload a file
-          </div>
-          <p className="mt-1 text-xs text-ink-500">
-            Saved to Supabase Storage under <code className="rounded bg-sand-100 px-1">villa-images/media/</code>.
-          </p>
-          <input
-            type="file"
-            name="file"
-            accept="image/*"
-            required
-            className="mt-4 block w-full text-sm text-ink-700 file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-ink-900 file:px-4 file:py-2 file:text-xs file:text-sand-50 hover:file:bg-ink-700"
-          />
-          <input
-            name="alt"
-            placeholder="Alt text (optional)"
-            className="input mt-3"
-          />
-          <button className="btn-primary mt-4 w-full">
-            <Plus className="h-4 w-4" /> Upload
-          </button>
-        </form>
-
-        <form
-          action={addMediaUrl}
-          className="rounded-2xl border border-ink-900/5 bg-white p-5"
-        >
-          <div className="flex items-center gap-2 text-sm font-medium text-ink-900">
-            <LinkIcon className="h-4 w-4" />
-            Add by URL
-          </div>
-          <p className="mt-1 text-xs text-ink-500">
-            Useful for Unsplash or your own CDN. We&apos;ll just save the URL.
-          </p>
-          <input
-            name="url"
-            required
-            placeholder="https://..."
-            className="input mt-4"
-          />
-          <input
-            name="alt"
-            placeholder="Alt text (optional)"
-            className="input mt-3"
-          />
-          <button className="btn-primary mt-4 w-full">
-            <Plus className="h-4 w-4" /> Add to library
-          </button>
-        </form>
+        <UploadFileForm />
+        <AddUrlForm />
       </div>
 
       <div className="mt-10 flex items-center justify-between">
