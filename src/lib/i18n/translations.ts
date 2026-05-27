@@ -1,6 +1,18 @@
 export type Locale = "en" | "gr";
 
-export const translations = {
+type Dict = {
+  nav: Record<string, string>;
+  hero: Record<string, string>;
+  home: Record<string, string>;
+  listing: Record<string, string>;
+  detail: Record<string, string>;
+  auth: Record<string, string>;
+  favorites: Record<string, string>;
+  contact: Record<string, string>;
+  footer: Record<string, string>;
+};
+
+export const translations: Record<Locale, Dict> = {
   en: {
     nav: {
       home: "Home",
@@ -192,6 +204,6 @@ export const translations = {
       rights: "Με την επιφύλαξη παντός δικαιώματος.",
     },
   },
-} as const;
+};
 
-export type Translations = typeof translations.en;
+export type Translations = Dict;

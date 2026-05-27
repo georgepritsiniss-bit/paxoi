@@ -1,8 +1,22 @@
+import { createClient } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "./server";
 import type { Villa, VillaImage, VillaWithImages, UnavailableDate } from "@/types";
 
+/**
+ * Build a Supabase client that does NOT touch cookies. Safe to call from
+ * `generateStaticParams` / `generateMetadata` where a request scope is not
+ * available. All these queries only read publicly-readable rows.
+ */
+function publicClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { auth: { persistSession: false, autoRefreshToken: false } }
+  );
+}
+
 export async function getAllVillas(): Promise<VillaWithImages[]> {
-  const supabase = createSupabaseServerClient();
+  const supabase = publicClient();
   const { data: villas, error } = await supabase
     .from("villas")
     .select("*")
@@ -32,7 +46,7 @@ export async function getFeaturedVillas(limit = 3): Promise<VillaWithImages[]> {
 export async function getVillaBySlug(
   slug: string
 ): Promise<VillaWithImages | null> {
-  const supabase = createSupabaseServerClient();
+  const supabase = publicClient();
   const { data: villa, error } = await supabase
     .from("villas")
     .select("*")
@@ -51,7 +65,7 @@ export async function getVillaBySlug(
 }
 
 export async function getVillaById(id: string): Promise<VillaWithImages | null> {
-  const supabase = createSupabaseServerClient();
+  const supabase = publicClient();
   const { data: villa } = await supabase
     .from("villas")
     .select("*")
@@ -69,7 +83,7 @@ export async function getVillaById(id: string): Promise<VillaWithImages | null> 
 export async function getUnavailableDates(
   villaId: string
 ): Promise<UnavailableDate[]> {
-  const supabase = createSupabaseServerClient();
+  const supabase = publicClient();
   const { data } = await supabase
     .from("villa_unavailable_dates")
     .select("*")
