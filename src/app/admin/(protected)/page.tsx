@@ -47,19 +47,24 @@ export default async function AdminDashboardPage() {
 
   const quickLinks = [
     {
-      title: "Edit homepage content",
-      body: "Tune the hero, about, experiences and CTA blocks (EN + GR).",
-      href: "/admin/content",
+      title: "Page builder",
+      body: "Arrange homepage modules, edit hero slider, about, CTA and more.",
+      href: "/admin/layout",
     },
     {
-      title: "Manage media library",
+      title: "Manage villas",
+      body: "Edit listings, galleries, availability and booking links.",
+      href: "/admin/villas",
+    },
+    {
+      title: "Media library",
       body: "Upload reusable images or save Unsplash URLs.",
       href: "/admin/media",
     },
     {
-      title: "Add a new villa",
-      body: "Spin up a listing, then attach a gallery from the edit page.",
-      href: "/admin/villas/new",
+      title: "Site pages",
+      body: "Edit About, FAQ and preview all public pages.",
+      href: "/admin/pages",
     },
   ];
 

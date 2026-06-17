@@ -240,6 +240,12 @@ const VALID_CONTENT_KEYS = new Set([
   "home_about",
   "home_experiences",
   "home_cta",
+  "home_layout",
+  "home_slider",
+  "home_text",
+  "home_faq",
+  "page_about",
+  "page_faq",
 ]);
 
 /**
@@ -275,6 +281,35 @@ export async function saveSiteContent(key: string, formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/admin/content");
+  revalidatePath("/admin/layout");
+  revalidatePath("/about");
+  revalidatePath("/faq");
+  revalidatePath("/experiences");
+}
+
+export async function saveHomeLayout(formData: FormData) {
+  requireAdmin();
+  const raw = String(formData.get("layout") || "").trim();
+  let parsed: unknown = { modules: [] };
+  if (raw) {
+    try {
+      parsed = JSON.parse(raw);
+    } catch (e) {
+      throw new Error("Invalid layout JSON: " + (e as Error).message);
+    }
+  }
+  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+    throw new Error("Layout must be a JSON object.");
+  }
+
+  const supabase = createSupabaseAdminClient();
+  const { error } = await supabase
+    .from("site_content")
+    .upsert({ key: "home_layout", value: parsed }, { onConflict: "key" });
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/");
+  revalidatePath("/admin/layout");
 }
 
 export async function resetSiteContent(key: string) {
@@ -288,11 +323,14 @@ export async function resetSiteContent(key: string) {
   if (error) throw new Error(error.message);
   revalidatePath("/");
   revalidatePath("/admin/content");
+  revalidatePath("/admin/layout");
+  revalidatePath("/about");
+  revalidatePath("/faq");
+  revalidatePath("/experiences");
 }
 
 // ============================================================
 //  Media library
-// ============================================================
 
 function fileExt(name: string) {
   const dot = name.lastIndexOf(".");

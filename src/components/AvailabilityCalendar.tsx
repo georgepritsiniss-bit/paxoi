@@ -59,27 +59,27 @@ export default function AvailabilityCalendar({
   const weekDays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
   return (
-    <div className="rounded-3xl border border-ink-900/5 bg-white p-5 md:p-6">
+    <div className="glass rounded-[1.75rem] p-5 shadow-float md:p-6">
       <div className="flex items-center justify-between">
-        <h3 className="font-serif text-xl font-light text-ink-900">
+        <h3 className="font-serif text-xl font-light text-ink-900 md:text-2xl">
           {t.detail.calendar}
         </h3>
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={() => setCursor((c) => addMonths(c, -1))}
-            className="grid h-9 w-9 place-items-center rounded-full text-ink-700 hover:bg-ink-900/5"
+            className="grid h-9 w-9 place-items-center rounded-full text-ink-700 transition-colors hover:bg-ink-900/5"
             aria-label="Previous month"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <div className="w-36 text-center text-sm font-medium text-ink-900">
+          <div className="w-36 text-center text-sm font-semibold text-ink-900">
             {format(cursor, "LLLL yyyy")}
           </div>
           <button
             type="button"
             onClick={() => setCursor((c) => addMonths(c, 1))}
-            className="grid h-9 w-9 place-items-center rounded-full text-ink-700 hover:bg-ink-900/5"
+            className="grid h-9 w-9 place-items-center rounded-full text-ink-700 transition-colors hover:bg-ink-900/5"
             aria-label="Next month"
           >
             <ChevronRight className="h-4 w-4" />
@@ -87,7 +87,7 @@ export default function AvailabilityCalendar({
         </div>
       </div>
 
-      <div className="mt-5 grid grid-cols-7 gap-1 text-center text-[10px] uppercase tracking-wider text-ink-400">
+      <div className="mt-5 grid grid-cols-7 gap-1 text-center text-[10px] font-semibold uppercase tracking-wider text-ink-400">
         {weekDays.map((d) => (
           <div key={d} className="py-1">
             {d}
@@ -110,18 +110,18 @@ export default function AvailabilityCalendar({
             <div
               key={d.toISOString()}
               className={cn(
-                "relative grid aspect-square place-items-center rounded-lg text-sm",
+                "relative grid aspect-square place-items-center rounded-xl text-sm transition-colors",
                 outside && "text-ink-300",
                 !outside && !unav && !past && "text-ink-900",
                 past && "text-ink-300 line-through",
-                unav && !past && "bg-red-50 text-red-700",
-                !unav && !past && !outside && "hover:bg-ink-900/5"
+                unav && !past && "bg-red-50 font-medium text-red-700 ring-1 ring-red-100",
+                !unav && !past && !outside && "hover:bg-sand-100"
               )}
               title={unav ? t.detail.booked : t.detail.available}
             >
               {format(d, "d")}
               {isSameDay(d, today) && (
-                <span className="absolute bottom-1 h-1 w-1 rounded-full bg-ink-900" />
+                <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-sand-500" />
               )}
             </div>
           );
@@ -134,7 +134,7 @@ export default function AvailabilityCalendar({
           {t.detail.booked}
         </span>
         <span className="inline-flex items-center gap-2">
-          <span className="h-3 w-3 rounded bg-ink-900/5 ring-1 ring-ink-900/10" />
+          <span className="h-3 w-3 rounded bg-sand-100 ring-1 ring-sand-200" />
           {t.detail.available}
         </span>
       </div>

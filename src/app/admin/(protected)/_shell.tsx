@@ -19,11 +19,13 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { href: "/admin/layout", label: "Page builder", icon: Sparkles },
+  { href: "/admin/pages", label: "Site pages", icon: LayoutDashboard },
   { href: "/admin/villas", label: "Villas", icon: Home },
   { href: "/admin/villas/new", label: "New villa", icon: PlusCircle },
-  { href: "/admin/content", label: "Site content", icon: Sparkles },
   { href: "/admin/media", label: "Media library", icon: ImageIcon },
   { href: "/admin/messages", label: "Messages", icon: MessageSquare },
+  { href: "/admin/content", label: "Advanced JSON", icon: Sparkles },
 ];
 
 function NavList({

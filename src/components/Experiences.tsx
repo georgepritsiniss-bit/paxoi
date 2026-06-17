@@ -113,7 +113,7 @@ export default function Experiences({
           </motion.h2>
         </div>
 
-        <div className="mt-14 grid gap-4 sm:gap-5 md:mt-16 md:grid-cols-2">
+        <div className="mt-14 flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar md:mt-16 md:grid md:grid-cols-2 md:gap-5 md:overflow-visible md:pb-0">
           {items.map((it, i) => {
             const Icon = ICONS[it.icon || "Sparkles"] || Sparkles;
             const title =
@@ -133,7 +133,7 @@ export default function Experiences({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.7, delay: i * 0.08 }}
-                className={`group relative overflow-hidden rounded-[1.75rem] ring-1 ring-white/10 transition-all duration-500 hover:ring-sand-400/30 hover:shadow-glow ${isLarge ? "md:row-span-1" : ""}`}
+                className={`group relative shrink-0 snap-center overflow-hidden rounded-[1.75rem] ring-1 ring-white/10 transition-all duration-500 hover:ring-sand-400/30 hover:shadow-glow w-[85vw] max-w-[420px] md:w-auto md:max-w-none ${isLarge ? "md:row-span-1" : ""}`}
               >
                 <div className={`relative ${isLarge ? "aspect-[16/11]" : "aspect-[16/10]"}`}>
                   {it.image && (

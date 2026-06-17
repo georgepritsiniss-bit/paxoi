@@ -20,14 +20,14 @@ export default function VillaActions({
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="rounded-3xl border border-ink-900/5 bg-white p-6 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)]"
+      className="glass rounded-[1.75rem] p-6 shadow-float md:p-7"
     >
       {priceFrom != null && (
-        <div className="flex items-baseline gap-2">
-          <span className="text-xs uppercase tracking-wider text-ink-400">
+        <div className="flex items-baseline gap-2 border-b border-ink-900/5 pb-5">
+          <span className="text-xs font-semibold uppercase tracking-wider text-ink-400">
             {t.listing.from}
           </span>
-          <span className="font-serif text-3xl text-ink-900">
+          <span className="font-serif text-4xl text-ink-900">
             {formatPrice(priceFrom)}
           </span>
           <span className="text-xs text-ink-400">/ {t.listing.perNight}</span>
@@ -36,7 +36,7 @@ export default function VillaActions({
 
       <button
         type="button"
-        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-ink-900/5 px-5 py-3 text-sm font-medium text-ink-900 transition-all hover:bg-ink-900/10"
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full border border-ink-900/10 bg-ink-900/5 px-5 py-3.5 text-sm font-semibold text-ink-900 transition-all hover:border-sand-300/50 hover:bg-sand-50"
         onClick={() => {
           document
             .querySelector("#contact")
@@ -53,7 +53,7 @@ export default function VillaActions({
             href={bookingUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#003580] px-5 py-3 text-sm font-medium text-white transition-all hover:-translate-y-0.5"
+            className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#003580] px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
           >
             {t.detail.bookBooking}
             <ExternalLink className="h-4 w-4 opacity-80 transition group-hover:opacity-100" />
@@ -64,7 +64,7 @@ export default function VillaActions({
             href={airbnbUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#FF385C] px-5 py-3 text-sm font-medium text-white transition-all hover:-translate-y-0.5"
+            className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#FF385C] px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
           >
             {t.detail.bookAirbnb}
             <ExternalLink className="h-4 w-4 opacity-80 transition group-hover:opacity-100" />

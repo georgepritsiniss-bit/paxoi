@@ -17,7 +17,10 @@ export const translations: Record<Locale, Dict> = {
     nav: {
       home: "Home",
       villas: "Villas",
+      about: "About",
+      experiences: "Experiences",
       favorites: "Favorites",
+      faq: "FAQ",
       contact: "Contact",
       login: "Sign in",
       signup: "Sign up",
@@ -113,7 +116,10 @@ export const translations: Record<Locale, Dict> = {
     nav: {
       home: "Αρχική",
       villas: "Βίλες",
+      about: "Σχετικά",
+      experiences: "Εμπειρίες",
       favorites: "Αγαπημένα",
+      faq: "FAQ",
       contact: "Επικοινωνία",
       login: "Σύνδεση",
       signup: "Εγγραφή",

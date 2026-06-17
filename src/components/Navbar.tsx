@@ -50,7 +50,8 @@ export default function Navbar() {
   const links = [
     { href: "/", label: t.nav.home },
     { href: "/villas", label: t.nav.villas },
-    { href: "/favorites", label: t.nav.favorites },
+    { href: "/about", label: t.nav.about },
+    { href: "/experiences", label: t.nav.experiences },
     { href: "/contact", label: t.nav.contact },
   ];
 
@@ -110,7 +111,7 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-0.5 md:flex">
+          <nav className="hidden items-center gap-0.5 lg:flex">
             {links.map((l) => {
               const active = pathname === l.href;
               return (
@@ -152,7 +153,7 @@ export default function Navbar() {
             })}
           </nav>
 
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center gap-2 lg:flex">
             <LanguageSwitcher overHero={overHero} />
             {userEmail ? (
               <>
@@ -212,7 +213,7 @@ export default function Navbar() {
 
           <button
             className={cn(
-              "grid h-10 w-10 place-items-center rounded-full transition-colors md:hidden",
+              "grid h-10 w-10 place-items-center rounded-full transition-colors lg:hidden",
               overHero
                 ? "text-white hover:bg-white/10"
                 : "text-ink-900 hover:bg-ink-900/5"
@@ -233,7 +234,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="glass mx-4 mt-2 overflow-hidden rounded-3xl md:hidden"
+            className="glass mx-4 mt-2 overflow-hidden rounded-3xl lg:hidden"
           >
             <div className="container-px mx-auto flex max-w-7xl flex-col py-4">
               {links.map((l) => (

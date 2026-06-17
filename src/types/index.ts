@@ -71,6 +71,36 @@ export type LocalizedText = Partial<{
 
 export type HeroContent = {
   image?: string;
+  /** Multiple images enable the hero slider */
+  images?: Array<{ url: string; alt?: string }>;
+  autoplay?: number;
+  en?: LocalizedText;
+  gr?: LocalizedText;
+};
+
+export type SliderContent = {
+  images?: Array<{ url: string; alt?: string }>;
+  autoplay?: number;
+  en?: LocalizedText;
+  gr?: LocalizedText;
+};
+
+export type TextBlockContent = {
+  en?: LocalizedText;
+  gr?: LocalizedText;
+};
+
+export type FaqItem = {
+  en?: { q?: string; a?: string };
+  gr?: { q?: string; a?: string };
+};
+
+export type FaqContent = {
+  items?: FaqItem[];
+};
+
+export type PageContent = {
+  image?: string;
   en?: LocalizedText;
   gr?: LocalizedText;
 };
@@ -104,6 +134,12 @@ export type SiteContentMap = {
   home_about?: AboutContent;
   home_experiences?: ExperiencesContent;
   home_cta?: CtaContent;
+  home_layout?: { modules?: Array<{ id: string; type: string; enabled: boolean }> };
+  home_slider?: SliderContent;
+  home_text?: TextBlockContent;
+  home_faq?: FaqContent;
+  page_about?: PageContent;
+  page_faq?: FaqContent;
 };
 
 export type SiteContentKey = keyof SiteContentMap;

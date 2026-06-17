@@ -51,7 +51,9 @@ export default function Footer() {
             <ul className="mt-5 space-y-3">
               {[
                 { href: "/villas", label: t.nav.villas },
-                { href: "/favorites", label: t.nav.favorites },
+                { href: "/about", label: t.nav.about },
+                { href: "/experiences", label: t.nav.experiences },
+                { href: "/faq", label: t.nav.faq },
                 { href: "/contact", label: t.nav.contact },
               ].map((item) => (
                 <li key={item.href}>
@@ -73,14 +75,14 @@ export default function Footer() {
             </h4>
             <ul className="mt-5 space-y-3 text-sm text-sand-200/70">
               <li>
-                <a href="#" className="transition-colors hover:text-white">
+                <Link href="/terms" className="transition-colors hover:text-white">
                   {t.footer.terms}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="transition-colors hover:text-white">
+                <Link href="/privacy" className="transition-colors hover:text-white">
                   {t.footer.privacy}
-                </a>
+                </Link>
               </li>
               <li>
                 <Link

@@ -1,8 +1,4 @@
-import Hero from "@/components/Hero";
-import AboutSection from "@/components/AboutSection";
-import FeaturedVillas from "@/components/FeaturedVillas";
-import Experiences from "@/components/Experiences";
-import CallToAction from "@/components/CallToAction";
+import HomePageRenderer from "@/components/HomePageRenderer";
 import {
   getFeaturedVillas,
   getSiteContent,
@@ -19,12 +15,6 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="-mt-20">
-      <Hero content={site.home_hero} />
-      <AboutSection content={site.home_about} />
-      <FeaturedVillas villas={villas} favoriteIds={favoriteIds} />
-      <Experiences content={site.home_experiences} />
-      <CallToAction content={site.home_cta} />
-    </div>
+    <HomePageRenderer site={site} villas={villas} favoriteIds={favoriteIds} />
   );
 }
