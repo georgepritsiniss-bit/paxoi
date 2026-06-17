@@ -3,59 +3,74 @@ import { Mail, MapPin, Phone } from "lucide-react";
 
 export const metadata = { title: "Contact" };
 
+const CONTACT_ITEMS = [
+  {
+    icon: MapPin,
+    title: "Visit us",
+    detail: "Paxos, Ionian Islands, Greece",
+    href: null,
+  },
+  {
+    icon: Mail,
+    title: "Email",
+    detail: "hello@paxoi.example",
+    href: "mailto:hello@paxoi.example",
+  },
+  {
+    icon: Phone,
+    title: "Phone",
+    detail: "+30 26620 00000",
+    href: "tel:+302662000000",
+  },
+];
+
 export default function ContactPage() {
   return (
-    <div className="container-px mx-auto max-w-7xl py-16 md:py-24">
-      <div className="grid gap-12 lg:grid-cols-2">
-        <div>
-          <span className="eyebrow">Get in touch</span>
-          <h1 className="mt-3 h-display text-balance">
+    <div>
+      {/* Hero band */}
+      <div className="relative overflow-hidden bg-ink-900 py-20 md:py-28">
+        <div className="orb left-1/4 top-0 h-64 w-64 bg-sand-500/10" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-sand-400/30 to-transparent" />
+        <div className="container-px relative mx-auto max-w-7xl">
+          <span className="eyebrow-light">Get in touch</span>
+          <h1 className="mt-4 max-w-2xl font-serif text-4xl font-light leading-tight text-white md:text-5xl lg:text-6xl">
             Plan your stay with us.
           </h1>
-          <p className="mt-4 max-w-md text-ink-500">
+          <p className="mt-4 max-w-md text-sm leading-relaxed text-white/65 md:text-base">
             Questions about a villa, a long stay or a private event? Tell us a
             little and we&apos;ll be in touch within 24 hours.
           </p>
+        </div>
+      </div>
 
-          <div className="mt-10 space-y-5">
-            <div className="flex items-start gap-4">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-sand-100 text-sand-700">
-                <MapPin className="h-4 w-4" />
-              </span>
-              <div>
-                <div className="font-medium text-ink-900">Visit us</div>
-                <div className="text-sm text-ink-500">
-                  Paxos, Ionian Islands, Greece
+      <div className="container-px relative mx-auto max-w-7xl -mt-8 pb-20 md:pb-28">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+          <div className="space-y-4">
+            {CONTACT_ITEMS.map((item) => (
+              <div
+                key={item.title}
+                className="glass flex items-start gap-4 rounded-2xl p-5 transition-all duration-300 hover:shadow-float"
+              >
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-sand-100 to-sand-200 text-sand-700">
+                  <item.icon className="h-4 w-4" />
+                </span>
+                <div>
+                  <div className="font-semibold text-ink-900">{item.title}</div>
+                  {item.href ? (
+                    <a
+                      className="text-sm text-ink-500 transition-colors hover:text-sand-600"
+                      href={item.href}
+                    >
+                      {item.detail}
+                    </a>
+                  ) : (
+                    <div className="text-sm text-ink-500">{item.detail}</div>
+                  )}
                 </div>
               </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-sand-100 text-sand-700">
-                <Mail className="h-4 w-4" />
-              </span>
-              <div>
-                <div className="font-medium text-ink-900">Email</div>
-                <a
-                  className="text-sm text-ink-500 hover:text-ink-900"
-                  href="mailto:hello@paxoi.example"
-                >
-                  hello@paxoi.example
-                </a>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-sand-100 text-sand-700">
-                <Phone className="h-4 w-4" />
-              </span>
-              <div>
-                <div className="font-medium text-ink-900">Phone</div>
-                <div className="text-sm text-ink-500">+30 26620 00000</div>
-              </div>
-            </div>
+            ))}
           </div>
-        </div>
 
-        <div>
           <ContactForm />
         </div>
       </div>

@@ -47,18 +47,34 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ["var(--font-playfair)", "Georgia", "serif"],
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        serif: ["var(--font-cormorant)", "Georgia", "serif"],
+        sans: ["var(--font-jakarta)", "system-ui", "sans-serif"],
       },
       backgroundImage: {
         "hero-grain":
           "radial-gradient(transparent 1px, rgba(0,0,0,0.04) 1px), radial-gradient(transparent 1px, rgba(0,0,0,0.04) 1px)",
+        "mesh-light":
+          "radial-gradient(at 40% 20%, rgba(184,138,61,0.08) 0px, transparent 50%), radial-gradient(at 80% 0%, rgba(31,143,171,0.06) 0px, transparent 50%), radial-gradient(at 0% 50%, rgba(184,138,61,0.05) 0px, transparent 50%)",
+        "gold-shimmer":
+          "linear-gradient(110deg, transparent 25%, rgba(202,165,92,0.15) 50%, transparent 75%)",
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+      },
+      boxShadow: {
+        glow: "0 0 40px -8px rgba(184,138,61,0.35)",
+        "glow-lg": "0 0 60px -12px rgba(184,138,61,0.4)",
+        card: "0 1px 2px rgba(0,0,0,0.04), 0 8px 30px -12px rgba(0,0,0,0.12)",
+        "card-hover":
+          "0 24px 60px -20px rgba(0,0,0,0.22), 0 0 0 1px rgba(184,138,61,0.08)",
+        float: "0 8px 32px -8px rgba(15,13,12,0.18), 0 0 0 1px rgba(255,255,255,0.6)",
       },
       animation: {
         "fade-up": "fadeUp 0.8s ease-out forwards",
         "fade-in": "fadeIn 1s ease-out forwards",
         "slow-zoom": "slowZoom 20s ease-in-out infinite alternate",
         shimmer: "shimmer 2.5s linear infinite",
+        float: "float 6s ease-in-out infinite",
+        "pulse-soft": "pulseSoft 3s ease-in-out infinite",
+        "gradient-shift": "gradientShift 8s ease infinite",
       },
       keyframes: {
         fadeUp: {
@@ -76,6 +92,18 @@ const config: Config = {
         shimmer: {
           "0%": { backgroundPosition: "-1000px 0" },
           "100%": { backgroundPosition: "1000px 0" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-8px)" },
+        },
+        pulseSoft: {
+          "0%, 100%": { opacity: "0.6" },
+          "50%": { opacity: "1" },
+        },
+        gradientShift: {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
         },
       },
     },

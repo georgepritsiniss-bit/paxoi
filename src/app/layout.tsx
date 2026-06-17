@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Plus_Jakarta_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,14 +7,15 @@ import ScrollProgress from "@/components/ScrollProgress";
 import PageTransition from "@/components/PageTransition";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 
-const inter = Inter({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-jakarta",
   display: "swap",
 });
-const playfair = Playfair_Display({
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  variable: "--font-playfair",
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-cormorant",
   display: "swap",
 });
 
@@ -66,8 +67,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="el" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="min-h-screen bg-sand-50 font-sans antialiased">
+    <html lang="el" className={`${jakarta.variable} ${cormorant.variable}`}>
+      <body className="min-h-screen bg-sand-50 bg-mesh-light font-sans antialiased">
         <LanguageProvider>
           <ScrollProgress />
           <Navbar />

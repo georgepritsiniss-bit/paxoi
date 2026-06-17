@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Heart } from "lucide-react";
+import { Heart, ArrowRight } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getAllVillas } from "@/lib/supabase/queries";
 import VillaCard from "@/components/VillaCard";
@@ -27,27 +27,40 @@ export default async function FavoritesPage() {
   const favorites = all.filter((v) => favIds.includes(v.id));
 
   return (
-    <div className="container-px mx-auto max-w-7xl py-16 md:py-24">
-      <span className="eyebrow">{user.email}</span>
-      <h1 className="mt-3 h-display">Your favorites</h1>
+    <div>
+      <div className="relative overflow-hidden bg-gradient-to-b from-sand-100/60 to-transparent pb-12 pt-16 md:pb-16 md:pt-24">
+        <div className="container-px relative mx-auto max-w-7xl">
+          <span className="eyebrow">{user.email}</span>
+          <h1 className="page-header mt-4 h-display">Your favorites</h1>
+          <p className="mt-4 text-ink-500">
+            {favorites.length} saved{" "}
+            {favorites.length === 1 ? "villa" : "villas"}
+          </p>
+        </div>
+      </div>
 
-      {favorites.length === 0 ? (
-        <div className="mt-12 grid place-items-center rounded-3xl border border-dashed border-ink-200 p-16 text-center">
-          <div className="grid h-14 w-14 place-items-center rounded-full bg-sand-100">
-            <Heart className="h-6 w-6 text-sand-600" />
+      <div className="container-px mx-auto max-w-7xl pb-20 md:pb-28">
+        {favorites.length === 0 ? (
+          <div className="glass grid place-items-center rounded-[1.75rem] p-16 text-center shadow-float">
+            <div className="grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-sand-100 to-sand-200">
+              <Heart className="h-7 w-7 text-sand-600" />
+            </div>
+            <p className="mt-5 text-ink-500">
+              You haven&apos;t saved any villas yet.
+            </p>
+            <Link href="/villas" className="btn-primary mt-8 group">
+              Browse villas
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
-          <p className="mt-4 text-ink-500">You haven&apos;t saved any villas yet.</p>
-          <Link href="/villas" className="btn-primary mt-6">
-            Browse villas
-          </Link>
-        </div>
-      ) : (
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {favorites.map((v, i) => (
-            <VillaCard key={v.id} villa={v} initialFavorited index={i} />
-          ))}
-        </div>
-      )}
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {favorites.map((v, i) => (
+              <VillaCard key={v.id} villa={v} initialFavorited index={i} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

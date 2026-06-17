@@ -41,10 +41,14 @@ export default function ContactForm({ villaId }: { villaId?: string }) {
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="grid place-items-center rounded-3xl border border-emerald-200 bg-emerald-50 p-10 text-center text-emerald-700"
+        className="glass grid place-items-center rounded-[1.75rem] p-12 text-center"
       >
-        <CheckCircle2 className="h-10 w-10" />
-        <p className="mt-3 text-sm">{t.contact.success}</p>
+        <div className="grid h-16 w-16 place-items-center rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-emerald-200">
+          <CheckCircle2 className="h-8 w-8" />
+        </div>
+        <p className="mt-4 text-sm font-medium text-emerald-700">
+          {t.contact.success}
+        </p>
       </motion.div>
     );
   }
@@ -52,9 +56,9 @@ export default function ContactForm({ villaId }: { villaId?: string }) {
   return (
     <form
       onSubmit={onSubmit}
-      className="grid gap-4 rounded-3xl border border-ink-900/5 bg-white p-6 md:p-8"
+      className="glass grid gap-5 rounded-[1.75rem] p-6 shadow-float md:p-8"
     >
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-5 md:grid-cols-2">
         <div>
           <label className="label" htmlFor="name">
             {t.contact.name}
@@ -65,7 +69,13 @@ export default function ContactForm({ villaId }: { villaId?: string }) {
           <label className="label" htmlFor="email">
             {t.contact.email}
           </label>
-          <input id="email" name="email" type="email" required className="input" />
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            className="input"
+          />
         </div>
       </div>
       <div>
@@ -87,13 +97,15 @@ export default function ContactForm({ villaId }: { villaId?: string }) {
         />
       </div>
       {errorMsg && (
-        <p className="text-sm text-red-600">{t.contact.error}: {errorMsg}</p>
+        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600 ring-1 ring-red-100">
+          {t.contact.error}: {errorMsg}
+        </p>
       )}
       <div>
         <button
           type="submit"
           disabled={status === "loading"}
-          className="btn-primary"
+          className="btn-primary w-full sm:w-auto"
         >
           {status === "loading" ? (
             <Loader2 className="h-4 w-4 animate-spin" />
