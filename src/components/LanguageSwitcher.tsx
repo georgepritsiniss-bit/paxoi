@@ -12,9 +12,9 @@ export default function LanguageSwitcher({
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-full border p-1 text-xs font-semibold backdrop-blur-xl transition-all",
+        "inline-flex items-center rounded-full border p-0.5 text-[11px] font-medium backdrop-blur-xl transition-all",
         overHero
-          ? "border-white/25 bg-white/10"
+          ? "border-white/20 bg-white/10"
           : "border-ink-900/10 bg-white/70 shadow-sm"
       )}
     >
@@ -29,7 +29,7 @@ export default function LanguageSwitcher({
               overHero
                 ? active
                   ? "bg-white text-ink-900 shadow-sm"
-                  : "text-white/75 hover:text-white"
+                  : "text-white/70 hover:text-white"
                 : active
                 ? "bg-ink-900 text-sand-50 shadow-sm"
                 : "text-ink-500 hover:text-ink-900"

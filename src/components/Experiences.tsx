@@ -107,7 +107,7 @@ export default function Experiences({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="mt-4 font-serif text-3xl font-light leading-tight md:text-4xl lg:text-5xl"
+            className="mt-5 font-serif text-3xl font-normal leading-tight tracking-tight md:text-4xl lg:text-[2.75rem]"
           >
             {t.home.experiencesTitle}
           </motion.h2>
@@ -133,7 +133,7 @@ export default function Experiences({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.7, delay: i * 0.08 }}
-                className={`group relative shrink-0 snap-center overflow-hidden rounded-[1.75rem] ring-1 ring-white/10 transition-all duration-500 hover:ring-sand-400/30 hover:shadow-glow w-[85vw] max-w-[420px] md:w-auto md:max-w-none ${isLarge ? "md:row-span-1" : ""}`}
+                className={`group relative w-[85vw] max-w-[420px] shrink-0 snap-center overflow-hidden rounded-[1.5rem] ring-1 ring-white/10 transition-all duration-700 hover:ring-sand-400/25 hover:shadow-premium md:w-auto md:max-w-none ${isLarge ? "md:row-span-1" : ""}`}
               >
                 <div className={`relative ${isLarge ? "aspect-[16/11]" : "aspect-[16/10]"}`}>
                   {it.image && (
@@ -159,10 +159,10 @@ export default function Experiences({
                   </div>
 
                   <div>
-                    <h3 className="font-serif text-xl font-light sm:text-2xl lg:text-3xl">
+                    <h3 className="font-serif text-xl font-normal tracking-tight sm:text-2xl lg:text-[1.75rem]">
                       {title}
                     </h3>
-                    <p className="mt-2 max-w-md text-sm leading-relaxed text-sand-200/75 transition-colors group-hover:text-sand-100/90">
+                    <p className="mt-2 max-w-md text-sm font-light leading-relaxed text-sand-200/70 transition-colors group-hover:text-sand-100/90">
                       {body}
                     </p>
                   </div>

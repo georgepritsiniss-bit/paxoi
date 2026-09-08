@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Cormorant_Garamond } from "next/font/google";
+import { Instrument_Serif, Manrope } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,15 +7,16 @@ import ScrollProgress from "@/components/ScrollProgress";
 import PageTransition from "@/components/PageTransition";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 
-const jakarta = Plus_Jakarta_Sans({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-jakarta",
+  variable: "--font-manrope",
   display: "swap",
 });
-const cormorant = Cormorant_Garamond({
+const instrument = Instrument_Serif({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-cormorant",
+  weight: ["400"],
+  style: ["normal", "italic"],
+  variable: "--font-instrument",
   display: "swap",
 });
 
@@ -67,7 +68,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="el" className={`${jakarta.variable} ${cormorant.variable}`}>
+    <html lang="el" className={`${manrope.variable} ${instrument.variable}`}>
       <body className="min-h-screen bg-sand-50 bg-mesh-light font-sans antialiased">
         <LanguageProvider>
           <ScrollProgress />

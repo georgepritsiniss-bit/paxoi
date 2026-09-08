@@ -78,8 +78,8 @@ export default function FavoriteButton({
 
   const base =
     variant === "floating"
-      ? "absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/85 text-ink-900 backdrop-blur-md shadow-md transition-all hover:scale-105 hover:bg-white"
-      : "inline-flex items-center gap-2 rounded-full border border-ink-900/15 bg-white px-4 py-2 text-sm text-ink-900 transition-all hover:border-ink-900";
+      ? "absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/30 bg-white/90 text-ink-900 shadow-float backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:bg-white"
+      : "inline-flex items-center gap-2 rounded-full border border-ink-900/10 bg-white px-4 py-2 text-sm text-ink-900 shadow-sm transition-all hover:border-sand-400/40";
 
   return (
     <button

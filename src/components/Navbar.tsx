@@ -22,7 +22,7 @@ export default function Navbar() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 36);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -41,11 +41,9 @@ export default function Navbar() {
 
   useEffect(() => setOpen(false), [pathname]);
 
-  const onAdmin = pathname.startsWith("/admin");
-  if (onAdmin) return null;
+  if (pathname.startsWith("/admin")) return null;
 
   const overHero = hasDarkHero(pathname) && !scrolled;
-  const floating = scrolled && !overHero;
 
   const links = [
     { href: "/", label: t.nav.home },
@@ -64,48 +62,30 @@ export default function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 z-50 w-full transition-all duration-500 ease-out",
-        overHero && "bg-gradient-to-b from-ink-900/60 via-ink-900/20 to-transparent",
-        !overHero && !floating && "bg-sand-50/80 backdrop-blur-xl",
-        floating && "py-3"
+        "fixed top-0 z-50 w-full transition-all duration-700 ease-out",
+        overHero && "bg-gradient-to-b from-ink-900/50 via-ink-900/15 to-transparent",
+        !overHero && scrolled && "border-b border-ink-900/[0.06] bg-sand-50/80 shadow-premium backdrop-blur-2xl",
+        !overHero && !scrolled && "bg-sand-50/70 backdrop-blur-xl"
       )}
     >
-      <div
-        className={cn(
-          "container-px mx-auto transition-all duration-500",
-          floating ? "max-w-5xl" : "max-w-7xl"
-        )}
-      >
+      <div className="container-px mx-auto max-w-7xl">
         <div
           className={cn(
             "flex items-center justify-between transition-all duration-500",
-            floating
-              ? "glass h-14 rounded-full px-2 shadow-float sm:px-4"
-              : scrolled
-              ? "h-16 border-b border-ink-900/5"
-              : "h-20"
+            scrolled ? "h-[4.25rem]" : "h-20"
           )}
         >
-          <Link
-            href="/"
-            className="group flex items-center gap-2 pl-2 sm:pl-0"
-            aria-label="Paxoi Villas — home"
-          >
+          <Link href="/" className="group" aria-label="Paxoi Villas — home">
             <span
               className={cn(
-                "font-serif text-2xl tracking-tight transition-colors lg:text-[1.65rem]",
+                "font-serif text-[1.65rem] tracking-tight transition-colors duration-500",
                 overHero
-                  ? "text-white drop-shadow-[0_1px_12px_rgba(0,0,0,0.5)] group-hover:text-sand-100"
+                  ? "text-white group-hover:text-sand-100"
                   : "text-ink-900 group-hover:text-sand-700"
               )}
             >
               Paxoi
-              <span
-                className={cn(
-                  "bg-gradient-to-r from-sand-400 to-sand-600 bg-clip-text",
-                  overHero ? "text-sand-300" : "text-transparent"
-                )}
-              >
+              <span className={cn(overHero ? "text-sand-300" : "text-sand-500")}>
                 .
               </span>
             </span>
@@ -119,33 +99,25 @@ export default function Navbar() {
                   key={l.href}
                   href={l.href}
                   className={cn(
-                    "relative rounded-full px-4 py-2 text-sm font-medium transition-all duration-300",
+                    "relative px-4 py-2 text-[13px] font-medium tracking-wide transition-colors duration-300",
                     overHero
                       ? active
                         ? "text-white"
-                        : "text-white/75 hover:bg-white/10 hover:text-white"
+                        : "text-white/70 hover:text-white"
                       : active
-                      ? "bg-ink-900/5 text-ink-900"
-                      : "text-ink-500 hover:bg-ink-900/5 hover:text-ink-900"
+                      ? "text-ink-900"
+                      : "text-ink-500 hover:text-ink-900"
                   )}
-                  style={
-                    overHero
-                      ? { textShadow: "0 1px 12px rgba(0,0,0,0.45)" }
-                      : undefined
-                  }
                 >
                   {l.label}
-                  {active && !floating && (
+                  {active && (
                     <motion.span
                       layoutId="nav-underline"
-                      transition={{
-                        duration: 0.4,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
                       className={cn(
-                        "absolute inset-x-3 -bottom-0.5 h-px",
+                        "absolute inset-x-4 -bottom-0.5 h-px",
                         overHero ? "bg-sand-300" : "bg-sand-500"
                       )}
+                      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                     />
                   )}
                 </Link>
@@ -163,8 +135,8 @@ export default function Navbar() {
                   className={cn(
                     "inline-flex h-9 w-9 items-center justify-center rounded-full transition-all",
                     overHero
-                      ? "text-white/90 hover:bg-white/10 hover:text-white"
-                      : "text-ink-700 hover:bg-ink-900/5"
+                      ? "text-white/85 hover:bg-white/10 hover:text-white"
+                      : "text-ink-600 hover:bg-ink-900/5"
                   )}
                 >
                   <Heart className="h-4 w-4" />
@@ -172,14 +144,14 @@ export default function Navbar() {
                 <button
                   onClick={handleLogout}
                   className={cn(
-                    "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all",
+                    "inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-[13px] font-medium transition-all",
                     overHero
-                      ? "text-white hover:bg-white/10"
-                      : "text-ink-700 hover:bg-ink-900/5"
+                      ? "text-white/85 hover:bg-white/10"
+                      : "text-ink-600 hover:bg-ink-900/5"
                   )}
                 >
-                  <LogOut className="h-4 w-4" />
-                  <span className="hidden lg:inline">{t.nav.logout}</span>
+                  <LogOut className="h-3.5 w-3.5" />
+                  <span className="hidden xl:inline">{t.nav.logout}</span>
                 </button>
               </>
             ) : (
@@ -187,22 +159,22 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   className={cn(
-                    "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all",
+                    "inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-[13px] font-medium transition-all",
                     overHero
-                      ? "text-white hover:bg-white/10"
-                      : "text-ink-700 hover:bg-ink-900/5"
+                      ? "text-white/85 hover:bg-white/10"
+                      : "text-ink-600 hover:bg-ink-900/5"
                   )}
                 >
-                  <User className="h-4 w-4" />
-                  <span className="hidden lg:inline">{t.nav.login}</span>
+                  <User className="h-3.5 w-3.5" />
+                  <span className="hidden xl:inline">{t.nav.login}</span>
                 </Link>
                 <Link
                   href="/signup"
                   className={cn(
-                    "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 ease-out hover:-translate-y-0.5",
+                    "inline-flex items-center rounded-full px-5 py-2.5 text-[13px] font-medium tracking-wide transition-all duration-500 hover:-translate-y-0.5",
                     overHero
-                      ? "bg-white text-ink-900 shadow-glow hover:bg-sand-50"
-                      : "bg-ink-900 text-sand-50 hover:bg-ink-800 hover:shadow-glow"
+                      ? "bg-white text-ink-900 hover:bg-sand-50"
+                      : "bg-ink-900 text-sand-50 hover:bg-ink-800 hover:shadow-premium"
                   )}
                 >
                   {t.nav.signup}
@@ -233,25 +205,24 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="glass mx-4 mt-2 overflow-hidden rounded-3xl lg:hidden"
+            className="glass mx-4 mt-1 overflow-hidden rounded-3xl lg:hidden"
           >
-            <div className="container-px mx-auto flex max-w-7xl flex-col py-4">
+            <div className="flex flex-col p-3">
               {links.map((l) => (
                 <Link
                   key={l.href}
                   href={l.href}
                   className={cn(
-                    "rounded-2xl px-4 py-3.5 text-base font-medium transition-colors",
+                    "rounded-2xl px-4 py-3.5 text-[15px] font-medium",
                     pathname === l.href
-                      ? "bg-ink-900/5 text-ink-900"
-                      : "text-ink-700 hover:bg-ink-900/5"
+                      ? "bg-ink-900/[0.04] text-ink-900"
+                      : "text-ink-600 hover:bg-ink-900/[0.03]"
                   )}
                 >
                   {l.label}
                 </Link>
               ))}
-              <div className="mt-3 flex items-center justify-between border-t border-ink-900/5 pt-3">
+              <div className="mt-2 flex items-center justify-between border-t border-ink-900/5 pt-3">
                 <LanguageSwitcher />
                 {userEmail ? (
                   <button onClick={handleLogout} className="btn-ghost">
@@ -263,7 +234,7 @@ export default function Navbar() {
                     <Link href="/login" className="btn-ghost">
                       {t.nav.login}
                     </Link>
-                    <Link href="/signup" className="btn-primary">
+                    <Link href="/signup" className="btn-primary !py-2.5 !px-5">
                       {t.nav.signup}
                     </Link>
                   </div>
@@ -271,7 +242,7 @@ export default function Navbar() {
               </div>
               <Link
                 href="/admin/login"
-                className="mt-2 flex items-center gap-2 rounded-2xl px-4 py-3 text-sm text-ink-400 hover:bg-ink-900/5"
+                className="mt-1 flex items-center gap-2 rounded-2xl px-4 py-3 text-sm text-ink-400"
               >
                 <Shield className="h-4 w-4" />
                 {t.nav.admin}
